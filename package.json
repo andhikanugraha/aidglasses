@@ -1,0 +1,8 @@
+{
+  "author": "Andhika Nugraha <andhika.nugraha@outlook.com>",
+  "description": "A simple viewer for IATI documents.",
+  "dependencies": {
+    "xml2js": "*",
+    "eyes": "*"
+  }
+}
