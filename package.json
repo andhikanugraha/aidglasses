@@ -4,7 +4,7 @@
   "dependencies": {
     "xml2js": "*",
     "eyes": "*",
-    "express": "3.*",
+    "express": "*",
     "express3-handlebars": "*",
     "marked": "*"
   }
