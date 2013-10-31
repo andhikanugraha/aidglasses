@@ -6,11 +6,18 @@ var express = require('express'),
     app = express(),
     config = require('./config')[app.get('env')];
 
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+var store = {};
+
+app.engine('handlebars', exphbs({defaultLayout: 'main', helpers: require('./helpers')}));
 app.set('view engine', 'handlebars');
 
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+app.use(app.router);
+app.use(express.static('public/'));
+
+if (app.get('env') == 'development')
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 
 app.get('/', function (req, res) {
   res.render('home', {title: "Hello"});
@@ -22,8 +29,9 @@ app.post('/', function(req, res) {
       parse.fromFile(src.path, function(err, data) {
         if (err)
           throw err;
-        else
+        else {
           res.render('results', { report: data });
+        }
       });
     else
       throw 'Upload failed';
@@ -33,9 +41,7 @@ app.post('/', function(req, res) {
   }
 });
 
-app.use(express.static('public/'));
 app.listen(config.port);
-
 console.log('AidGlasses running in ' + app.get('env') + ' mode on port ' + config.port + '.');
 
 // var inspect = require('eyes').inspector({ maxLength: 4096 });

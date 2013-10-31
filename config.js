@@ -1,8 +1,10 @@
 config = module.exports = {
   development: {
+    secret: 'aidglasses',
     port: 3000
   },
   production: {
-    port: 80
+    secret: process.env.SECRET,
+    port: process.env.PORT || 80
   }
 }

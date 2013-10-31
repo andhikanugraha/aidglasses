@@ -1,0 +1,41 @@
+@import url(bootstrap.min.css);
+
+.activity {
+	margin-bottom: 60px;
+}
+
+.activity header {
+	border-bottom: 1px solid #f6f6f6;
+	margin-bottom: 10px;
+}
+
+.activity h5 {
+	font-weight: 300;
+	margin-top: 15px;
+	margin-bottom: 6px;
+	color: #999;
+}
+.activity h5:first-child {
+	margin-top: 0;
+}
+
+.activity h5 + p {
+	margin-top: 5px;
+}
+
+.activity .none {
+	font-style: italic;
+	color: #999;
+}
+
+.activity .details a {
+	font-weight: bold;
+}
+
+.activity .details ul {
+	list-style: none;
+	padding-left: 0;
+}
+.activity .details ul li {
+	margin-bottom: 3px;
+}

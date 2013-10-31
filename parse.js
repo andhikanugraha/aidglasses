@@ -84,7 +84,7 @@ parse = function(data) {
           ref: data['$'].ref
         }
 
-        activity.participatingOrgs.push(org);
+        activity.reportingOrgs.push(org);
       });
 
     activities.push(activity);
