@@ -39,3 +39,8 @@
 .activity .details ul li {
 	margin-bottom: 3px;
 }
+
+.activity .description p,
+.activity .description li {
+	font-size: 17px;
+}
