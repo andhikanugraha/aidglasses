@@ -95,7 +95,9 @@ parse = function(data) {
   return report;
 }
 
-parseFile = module.exports = function(fileName, handler) {
+parseString = exports.fromString = parse;
+
+parseFile = exports.fromFile = function(fileName, handler) {
   fs.readFile(fileName, function(err, data) {
     if (err)
       handler(err);
