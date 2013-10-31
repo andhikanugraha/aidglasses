@@ -9,8 +9,28 @@ var express = require('express'),
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+app.use(express.bodyParser());
+app.use(express.methodOverride());
+
 app.get('/', function (req, res) {
-    res.render('home', {title: "Hello"});
+  res.render('home', {title: "Hello"});
+});
+
+app.post('/', function(req, res) {
+  try {
+    if (src = req.files.source)
+      parse.fromFile(src.path, function(err, data) {
+        if (err)
+          throw err;
+        else
+          res.render('results', { report: data });
+      });
+    else
+      throw 'Upload failed';
+  }
+  catch (e) {
+    res.render('home', {error: e})
+  }
 });
 
 app.use(express.static('public/'));
