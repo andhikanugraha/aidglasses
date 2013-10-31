@@ -3,6 +3,8 @@
   "description": "A simple viewer for IATI documents.",
   "dependencies": {
     "xml2js": "*",
-    "eyes": "*"
+    "eyes": "*",
+    "express": "3.*",
+    "express3-handlebars": "*"
   }
 }
