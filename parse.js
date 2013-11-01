@@ -12,7 +12,8 @@ parseActivity = function(data) {
     documentLinks: [],
     participatingOrgs: [],
     reportingOrgs: [],
-    locations: []
+    locations: [],
+    _raw: data
   };
 
   if (data['activity-status'])
@@ -23,11 +24,8 @@ parseActivity = function(data) {
       loc = {
         name: data.name[0],
         description: data.name[0],
-        coordinates: {
-          latitude: data.coordinates[0]['$'].latitude,
-          longitude: data.coordinates[0]['$'].longitude,
-          precision: data.coordinates[0]['$'].precision
-        }
+        coordinates: data.coordinates[0]['$'],
+        administrative: data.administrative[0]['$']
       }
 
       activity.locations.push(loc);
