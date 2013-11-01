@@ -5,9 +5,9 @@ xml2jsParser = new xml2js.Parser();
 
 parseActivity = function(data) {
   activity = {
-    title: data.title[0]['_'],
-    description: data.description[0]['_'],
-    iatiId: data['iati-identifier'][0],
+    title: data.title[0]['_'] || null,
+    description: data.description[0]['_'] || null,
+    iatiId: data['iati-identifier'][0] || null,
     status: null,
     documentLinks: [],
     participatingOrgs: [],

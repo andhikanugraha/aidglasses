@@ -1,0 +1,16 @@
+<h2 class="page-header">Activities</h2>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>IATI ID</th>
+			<th>Title</th>
+		</tr>
+	</thead>
+{{#each activities}}
+	<tr>
+		<td>{{iatiId}}</td>
+		<td><a href="/activity/{{_id}}">{{title}}</a></td>
+	</tr>
+{{/each}}
+</table>
