@@ -101,7 +101,7 @@ parse = function(data) {
     break;
   }
 
-  console.log(report);
+  report._raw = data;
 
   return report;
 }
