@@ -3,94 +3,107 @@ var fs = require('fs'),
 
 xml2jsParser = new xml2js.Parser();
 
-// Convert xml2js to a more IATI-specific JSON format.
-parse = function(data) {
-  root = data['iati-activities'];
+parseActivity = function(data) {
+  activity = {
+    title: data.title[0]['_'],
+    description: data.description[0]['_'],
+    iatiId: data['iati-identifier'][0],
+    status: null,
+    documentLinks: [],
+    participatingOrgs: [],
+    reportingOrgs: [],
+    locations: []
+  };
 
-  report = {};
-  report.generatedDateTime = root['$']['generated-datetime'];
+  if (data['activity-status'])
+    activity.status = data['activity-status'][0]['_'];
 
+  if (data['location'])
+    data['location'].forEach(function(data) {
+      loc = {
+        name: data.name[0],
+        description: data.name[0],
+        coordinates: {
+          latitude: data.coordinates[0]['$'].latitude,
+          longitude: data.coordinates[0]['$'].longitude,
+          precision: data.coordinates[0]['$'].precision
+        }
+      }
+
+      activity.locations.push(loc);
+    });
+
+  if (data['document-link'])
+    data['document-link'].forEach(function(data) {
+      doc = {
+        title: data.title[0],
+        url: data['$'].url,
+        format: data['$'].format,
+        categoryCodes: []
+      };
+
+      data.category.forEach(function(data) {
+        doc.categoryCodes.push(data['$'].code);
+      });
+
+      activity.documentLinks.push(doc);
+    });
+
+  if (data['participating-org'])
+    data['participating-org'].forEach(function(data) {
+      org = {
+        name: data['_'],
+        role: data['$'].role,
+        type: data['$'].type,
+        ref: data['$'].ref
+      }
+
+      activity.participatingOrgs.push(org);
+    });
+
+  if (data['reporting-org'])
+    data['reporting-org'].forEach(function(data) {
+      org = {
+        name: data['_'],
+        role: data['$'].role,
+        type: data['$'].type,
+        ref: data['$'].ref
+      }
+
+      activity.reportingOrgs.push(org);
+    });
+
+  return activity;
+}
+
+parseActivities = function(root) {
   rawActivities = root['iati-activity'];
   activities = [];
 
   rawActivities.forEach(function(data) {
-    activity = {
-      title: data.title[0]['_'],
-      description: data.description[0]['_'],
-      iatiId: data['iati-identifier'][0],
-      status: null,
-      documents: [],
-      participatingOrgs: [],
-      reportingOrgs: [],
-      locations: []
-    };
-
-    if (data['activity-status'])
-      activity.status = data['activity-status'][0]['_'];
-
-    if (data['location'])
-      data['location'].forEach(function(data) {
-        loc = {
-          name: data.name[0],
-          description: data.name[0],
-          coordinates: data.coordinates
-          // {
-          //   latitude: data.coordinates['$'].latitude,
-          //   longitude: data.coordinates['$'].longitude
-          // }
-        }
-
-        activity.locations.push(loc);
-      });
-
-    if (data['document-link'])
-      data['document-link'].forEach(function(data) {
-        doc = {
-          title: data.title[0],
-          url: data['$'].url,
-          format: data['$'].format,
-          categories: []
-        };
-
-        data.category.forEach(function(data) {
-          cat = {
-            name: data['_'],
-            code: data['$'].code
-          }
-          doc.categories.push(cat);
-        });
-
-        activity.documents.push(doc);
-      });
-
-    if (data['participating-org'])
-      data['participating-org'].forEach(function(data) {
-        org = {
-          name: data['_'],
-          role: data['$'].role,
-          type: data['$'].type,
-          ref: data['$'].ref
-        }
-
-        activity.participatingOrgs.push(org);
-      });
-
-    if (data['reporting-org'])
-      data['reporting-org'].forEach(function(data) {
-        org = {
-          name: data['_'],
-          role: data['$'].role,
-          type: data['$'].type,
-          ref: data['$'].ref
-        }
-
-        activity.reportingOrgs.push(org);
-      });
-
-    activities.push(activity);
+    activities.push(parseActivity(data));
   });
 
-  report.activities = activities;
+  return activities;
+}
+
+// Convert xml2js to a more IATI-specific JSON format.
+parse = function(data) {
+  var report = {};
+
+  for (root in data) {
+    report.generatedDateTime = data[root]['$']['generated-datetime'];
+
+    switch (root) {
+      case 'iati-activities':
+        report.activities = parseActivities(data[root]);
+        break;
+    }
+
+    break;
+  }
+
+  console.log(report);
 
   return report;
 }
@@ -108,5 +121,16 @@ parseFile = exports.fromFile = function(fileName, handler) {
         else
           handler(null, parse(data));
       });
+  })
+}
+
+parseSample = exports.fromSample = function(handler) {
+  fs.readFile('./sample.json', function(err, eee) {
+    if (err)
+      handler(e);
+    else {
+      obj = JSON.parse(eee);
+      handler(null, parse(obj));
+    }
   })
 }

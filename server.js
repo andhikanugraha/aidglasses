@@ -28,7 +28,7 @@ app.post('/', function(req, res) {
     if (src = req.files.source)
       parse.fromFile(src.path, function(err, data) {
         if (err)
-          throw err;
+          res.render('home', {error: err});
         else {
           res.render('results', { report: data });
         }
@@ -37,9 +37,26 @@ app.post('/', function(req, res) {
       throw 'Upload failed';
   }
   catch (e) {
-    res.render('home', {error: e})
+    res.render('home', {error: e});
   }
 });
+
+app.get('/test', function(req, res) {
+  try {
+    parse.fromSample(function(err, data) {
+      if (err) {
+        console.log(err);
+        res.render('home', {error: err});
+      }
+      else {
+        res.render('results', { report: data });
+      }
+    });
+  }
+  catch (e) {
+    res.render('home', {error: e});
+  }
+})
 
 app.listen(config.port);
 console.log('AidGlasses running in ' + app.get('env') + ' mode on port ' + config.port + '.');
