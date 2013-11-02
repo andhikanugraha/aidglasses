@@ -15,21 +15,9 @@
 	</head>
 	<body>
 		<div class="container">
- 			<nav class="navbar navbar-default navbar-static-top" role="navigation">
-				<div class="navbar-header"><a class="navbar-brand" href="/">AidGlasses</a></div>				
+			{{>navbar}}
 
-				<ul class="nav navbar-nav">
-					<li><a href="/activities">Activities</a></li>
-					<li><a href="/orgs">Organizations</a></li>
-					<li><a href="/orgs">Map</a></li>
-				</ul>
-
-				<p class="navbar-form navbar-right">
-					<a href="/purge" class="btn btn-danger">Purge database</a>
-				<p>
-			</nav>
-
-			{{{ body }}}
+			{{{body}}}
 		</div>
 
 		{{!--
