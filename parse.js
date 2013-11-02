@@ -13,6 +13,7 @@ parseActivity = function(data) {
     participatingOrgs: [],
     reportingOrgs: [],
     locations: [],
+    relatedActivities: [],
     _raw: data
   };
 
@@ -70,6 +71,16 @@ parseActivity = function(data) {
 
       activity.reportingOrgs.push(org);
     });
+
+  if (data['related-activity'])
+    data['related-activity'].forEach(function(data) {
+      ra = {
+        type: data['$'].type,
+        ref: data['$'].ref
+      }
+
+      activity.relatedActivities.push(ra);
+    })
 
   return activity;
 }

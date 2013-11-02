@@ -62,34 +62,53 @@ module.exports = function(app) {
       res.render('home', {error: 'Upload failed'});
   });
 
-  app.get('/activity/:id', function(req, res) {
-    Activity.findById(req.params.id, function(err, activity) {
-      res.render('viewActivity', {error: err, activity: activity});
-    })
-  });
-
-  app.get('/test', function(req, res) {
-    try {
-      parse.fromSample(function(err, data) {
-        if (err) {
-          console.log(err);
-          res.render('home', {error: err});
-        }
-        else {
-          res.render('results', { report: data });
-        }
-      });
-    }
-    catch (e) {
-      res.render('home', {error: e});
-    }
-  });
-
   app.get('/activities', function(req, res) {
     Activity.find().lean().exec(function(err, data) {
       res.render('activities', {activities: data});
     })
-  })
+  });
+
+  app.get('/activity/:id', function(req, res) {
+    Activity.findById(req.params.id, function(err, activity) {
+      async.map(activity.relatedActivities, function(ra, done) {
+        if (ra.ref) {
+          Activity.findById(ra.ref, 'title').lean()
+          .exec(function(err, doc) {
+            if (err)
+              done(err);
+            else {
+              ra.title = doc.title;
+              done(null, ra);
+            }
+          })
+        }
+        else
+          done(null);
+      }, function(err, relatedActivities) {
+        if (err)
+          console.log(err);
+        if (!err)
+          activity.relatedActivities = relatedActivities;
+      });
+
+      res.render('viewActivity', {error: err, activity: activity});
+    })
+  });
+
+  app.get('/purge', function(req, res) {
+    res.render('purge');
+  });
+
+  app.post('/purge', function(req, res) {
+    Activity.remove({}, function(err) {
+      if (err)
+        res.render('purge', {error: err});
+      else
+        res.render('purge', {success: true});
+    });
+  });
+
+  // -- only for dev --
 
   app.get('/mt', function(req, res) {
     parse.fromSample(function(err, data) {

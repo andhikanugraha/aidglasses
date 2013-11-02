@@ -1,0 +1,16 @@
+<h1 class="page-header">AidGlasses 0.1</h1>
+
+{{#if error}}
+<div class="alert alert-warning"><strong>An error occurred.</strong> {{ error }}</div>
+{{else}}
+{{#if success}}
+<p class="text-success">Database succesfully purged.</p>
+<p><a href="/" class="btn btn-primary">Go back home</a></p>
+{{/if}}
+
+<form action="/purge" method="POST">
+	<p class="text-danger">Purging the database will clear the database of all its contents, and cannot be undone.</p>
+	<p><button type="submit" class="btn btn-danger">Purge database</button></p>
+</form>
+{{/if}}
+

@@ -8,7 +8,7 @@ var documentLinkSchema = new Schema({
   categoryCodes: [String]
 });
 
-var orgSchema = new Schema({
+var orgRefSchema = new Schema({
   name: String,
   role: String,
   type: Number,
@@ -33,6 +33,14 @@ var locationSchema = new Schema({
   }
 });
 
+relatedActivitySchema = new Schema({
+  type: String,
+  ref: {
+    type: String,
+    ref: 'Activity'
+  }
+});
+
 var activitySchema = new Schema({
   _id: String,
   title: String,
@@ -40,9 +48,10 @@ var activitySchema = new Schema({
   iatiId: String,
   status: String,
   documentLinks: [documentLinkSchema],
-  participatingOrgs: [orgSchema],
-  reportingOrgs: [orgSchema],
+  participatingOrgs: [orgRefSchema],
+  reportingOrgs: [orgRefSchema],
   locations: [locationSchema],
+  relatedActivities: [relatedActivitySchema],
   _rawJSON: String
 });
 
@@ -55,7 +64,8 @@ activitySchema.virtual('_raw')
 });
 
 activitySchema.statics.generateIdFromIatiId = function(iatiId) {
-  return 'iati-registry:' + iatiId;
+  // return 'iati-registry:' + iatiId;
+  return iatiId;
 }
 activitySchema.methods.setIdFromIatiId = function() {
   this._id = activitySchema.statics.generateIdFromIatiId(this.iatiId);
