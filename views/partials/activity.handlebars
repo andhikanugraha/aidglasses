@@ -23,7 +23,7 @@
 					<h5>Documents</h5>
 					<ul>
 					{{#each documentLinks}}
-						<li><a href="{{url}}">{{title}}</a>{{#each categoryCodes}} <span class="label label-default" title="{{this}}">{{code.name 'DocumentCategory' this}}</span>{{/each}}</li>
+						<li><a href="{{url}}">{{title}}</a>{{#each categoryCodes}} <span class="label label-default" title="{{this}}">{{code 'DocumentCategory' this}}</span>{{/each}}</li>
 					{{else}}
 						<li class="none">None.</li>
 					{{/each}}

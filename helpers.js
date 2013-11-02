@@ -15,8 +15,7 @@ map = exports.map = function(lat, lon) {
   return 'http://maps.google.com/maps?z=12&t=m&q=loc:' + lat + '+' + lon;
 }
 
-code = exports.code = {
-  name: function(collection, code) {
-    return codelists.getName(collection, code);
-  }
+code = exports.code = function(collection, code) {
+  console.log(collection);
+  return codelists.getName(collection, code);
 }
