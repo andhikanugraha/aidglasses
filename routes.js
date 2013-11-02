@@ -1,7 +1,8 @@
 var async = require('async'),
     markdown = require('marked'),
     parse = require('./parse'),
-    models = require('./models');
+    models = require('./models'),
+    codelists = require('./codelists');
 
 var Activity = models.Activity;
 
@@ -127,7 +128,41 @@ module.exports = function(app) {
         res.render('map', {layout: 'map-page', points: points});
       }
     })
-  })
+  });
+
+  app.get('/org/:ref', function(req, res) {
+    oref = req.params.ref;
+    var vars = {};
+    async.parallel({
+      reporting: function(done) {
+        Activity.find({'reportingOrgs.ref': oref}, function(err, activities) {
+          if (err)
+            done(err);
+          else
+            done(null, activities);
+        });
+      },
+      participating: function(done) {
+        Activity.find({'participatingOrgs.ref': oref}, function(err, activities) {
+          if (err)
+            done(err);
+          else
+            done(null, activities);
+        });
+      }
+    }, function(err, activities) {
+      if (err)
+        res.render('org', { error: err });
+      else {
+        console.log(oref);
+        res.render('org', {
+          name: codelists.getName('OrganisationalIdentifier', oref),
+          reporting: activities.reporting,
+          participating: activities.participating
+        });
+      }
+    });
+  });
 
   app.get('/purge', function(req, res) {
     res.render('purge');

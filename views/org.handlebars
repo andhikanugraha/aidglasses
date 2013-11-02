@@ -1,0 +1,22 @@
+{{#if error}}
+<div class="error-wrapper">
+  <div class="alert alert-error">{{error}}</div>
+</div>
+{{/if}}
+
+<h2 class="page-header">{{name}}</h2>
+
+<div class="row">
+	<div class="col-md-6">
+		<h3>Reporting activities</h3>
+		{{#with reporting}}
+		{{>activity-table}}
+		{{/with}}
+	</div>
+	<div class="col-md-6">
+		<h3>Participating activities</h3>
+		{{#with participating}}
+		{{>activity-table}}
+		{{/with}}
+	</div>
+</div>
