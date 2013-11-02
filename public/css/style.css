@@ -41,6 +41,13 @@
 	margin-bottom: 3px;
 }
 
+.activity-table .id {
+	width: 14em;
+}
+.activity-table td.id {
+	font-family: Consolas, monospace;
+}
+
 .activity .description p,
 .activity .description li {
 	font-size: 17px;

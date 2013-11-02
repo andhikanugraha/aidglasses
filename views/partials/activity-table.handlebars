@@ -1,0 +1,14 @@
+<table class="table activity-table">
+	<thead>
+		<tr>
+			<th class="id">IATI ID</th>
+			<th class="title">Title</th>
+		</tr>
+	</thead>
+{{#each this}}
+	<tr>
+		<td class="id">{{iatiId}}</td>
+		<td class="title"><a href="/activity/{{_id}}">{{title}}</a></td>
+	</tr>
+{{/each}}
+</table>
