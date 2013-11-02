@@ -36,11 +36,54 @@
 	list-style: none;
 	padding-left: 0;
 }
-.activity .details ul li {
+.activity .details li,
+.activity .details p {
 	margin-bottom: 3px;
 }
 
 .activity .description p,
 .activity .description li {
 	font-size: 17px;
+}
+
+.map-page #site-nav {
+	margin-bottom: 0;
+}
+.error-wrapper {
+	position: absolute;
+	width: 60%;
+	margin: 10px 20%;
+	z-index: 40;
+	text-align: center;
+}
+
+.map-info-box p,
+.map-info-box li,
+.map-info-box a {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.3;
+}
+.map-info-box p,
+.map-info-box ul,
+.map-info-box h5 + p {
+	margin: 3px 0 6px;
+}
+.map-info-box li {
+	margin: 3px 0;
+}
+.map-info-box h3 {
+	font-weight: 600;
+}
+.map-info-box h5 {
+	font-weight: 300;
+	margin-bottom: 0;
+	line-height: 1.3;
+}
+.map-info-box .row {
+	margin-right: 0;
+	overflow: auto;
+}
+.map-info-box .btn {
+	margin-top: 12px;
 }

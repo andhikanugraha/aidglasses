@@ -1,0 +1,52 @@
+{{#if error}}
+<div class="error-wrapper">
+  <div class="alert alert-error">{{error}}</div>
+</div>
+{{/if}}
+<div id="map-canvas" style="height: 600px"></div>
+<script type="text/javascript">
+  var points = {{{json points}}};
+
+  function initialize() {
+    var mapOptions = {
+      center: new google.maps.LatLng(-2.5, 120),
+      zoom: 5,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("map-canvas"),
+        mapOptions);
+
+    points.forEach(function(point) {
+      var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(point.lat, point.lon),
+        title: point.title,
+        map: map
+      });
+
+      var contentString = 
+      '<div class="map-info-box activity">' +
+      '<h3>' + point.title + '</h3>'+
+      '<div class="row">' +
+      '<div class="col-md-3 details">' +
+      '<h5>Location</h5>' +
+      '<p>' + point.adm + '</p>' +
+      '<h5>Reporting Organizations</h5>' +
+      '<ul><li>' + point.reportingOrgNames.join('</li><li>') + '</li></p>' +
+      '<p><a href="/activity/' + point.ref + '" class="btn btn-primary btn-sm">View details</a></p>' +
+      '</div>' +
+      '<div class="col-md-9 description">' +
+      point.descriptionHTML +
+      '</div></div>';
+
+      var infowindow = new google.maps.InfoWindow({
+          content: contentString
+      });
+
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map, marker);
+      });
+
+    });
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);
+</script>

@@ -32,6 +32,22 @@ var locationSchema = new Schema({
     adm5: String
   }
 });
+locationSchema.methods.fullAdm = function(separator) {
+  if (!separator)
+    separator = ', ';
+
+  var output = '';
+  for (i=5; i>=1; i--) {
+    key = 'adm' + i;
+    value = this.administrative[key];
+    if (value)
+      output += value + ', ';
+  }
+
+  output += require('./countrycodes')[this.administrative.country];
+
+  return output;
+};
 
 relatedActivitySchema = new Schema({
   type: String,

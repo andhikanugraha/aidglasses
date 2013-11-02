@@ -1,4 +1,5 @@
 var async = require('async'),
+    markdown = require('marked'),
     parse = require('./parse'),
     models = require('./models');
 
@@ -94,6 +95,39 @@ module.exports = function(app) {
       res.render('viewActivity', {error: err, activity: activity});
     })
   });
+
+  app.get('/map', function(req, res) {
+    Activity.find()
+    .select({_id: 1, title: 1, description: 1, locations: 1, reportingOrgs: 1})
+    .exec(function(err, activities) {
+      if (err)
+        res.render('map', {layout: 'map-page', error: err});
+      else {
+        points = [];
+        activities.forEach(function(activity) {
+          activity.locations.forEach(function(location) {
+            point = {
+              lat: location.coordinates.latitude,
+              lon: location.coordinates.longitude,
+              ref: activity._id,
+              title: activity.title,
+              reportingOrgNames: [],
+              // description: activity.description,
+              descriptionHTML: markdown(activity.description),
+              adm: location.fullAdm()
+            };
+
+            activity.reportingOrgs.forEach(function(org) {
+              point.reportingOrgNames.push(org.name)
+            });
+
+            points.push(point);
+          });
+        });
+        res.render('map', {layout: 'map-page', points: points});
+      }
+    })
+  })
 
   app.get('/purge', function(req, res) {
     res.render('purge');
