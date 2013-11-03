@@ -12,7 +12,7 @@ var orgRefSchema = new Schema({
   name: String,
   role: String,
   type: Number,
-  ref: Number
+  ref: String
 });
 
 var locationSchema = new Schema({
