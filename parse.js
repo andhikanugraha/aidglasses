@@ -5,8 +5,8 @@ xml2jsParser = new xml2js.Parser();
 
 parseActivity = function(data) {
   activity = {
-    title: data.title[0]['_'] || null,
-    description: data.description[0]['_'] || null,
+    title: data.title[0]['_'] || data.title[0] || null,
+    description: data.description[0]['_'] || data.description[0] || null,
     iatiId: data['iati-identifier'][0] || null,
     status: null,
     documentLinks: [],
@@ -25,8 +25,8 @@ parseActivity = function(data) {
       loc = {
         name: data.name[0],
         description: data.name[0],
-        coordinates: data.coordinates[0]['$'],
-        administrative: data.administrative[0]['$']
+        coordinates: data.coordinates ? data.coordinates[0]['$'] : undefined,
+        administrative: data.administrative? data.administrative[0]['$'] : undefined
       }
 
       activity.locations.push(loc);
